@@ -10,9 +10,20 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+
+
+
+
       home: Scaffold(
+        backgroundColor: Colors.red,
+
+
+
+
+
+
         body: Center(
-          child: Text('Hello World!'),
+          child: Text('parayu ayisha...'),
         ),
       ),
     );
