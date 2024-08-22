@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app2/Homepage.dart';
+import 'package:notes_app2/add.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,23 +11,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-
-
-
-
-      home: Scaffold(
-        backgroundColor: Colors.red,
-
-
-
-
-
-
-        body: Center(
-          child: Text('parayu ayisha...'),
-        ),
-      ),
+  
+    return MaterialApp(
+      home: Homepage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
