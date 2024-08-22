@@ -13,7 +13,7 @@ class MainApp extends StatelessWidget {
 
 
 
-      
+
       home: Scaffold(
         backgroundColor: Colors.red,
 
@@ -23,7 +23,7 @@ class MainApp extends StatelessWidget {
 
 
         body: Center(
-          child: Text('Hello World!'),
+          child: Text('parayu ayisha...'),
         ),
       ),
     );
