@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app2/add.dart';
+import 'package:notes_app2/details.dart';
 
 class Homepage extends StatelessWidget {
   @override
@@ -36,26 +37,31 @@ class Homepage extends StatelessWidget {
                 children: [
                   ListView(
                     children: [
-                      Card(
-                        color: Colors.grey[900],
-                        margin: EdgeInsets.all(8.0),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.grey[700],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder:(context)=>Details()));
+                        },
+                        child: Card(
+                          color: Colors.grey[900],
+                          margin: EdgeInsets.all(8.0),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.grey[700],
+                            ),
+                            title: Text('Title', style: TextStyle(color: Colors.white)),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('lorem one two three', style: TextStyle(color: Colors.grey)),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text('10 Jan, 2023 10:15 pm',
+                                      style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+                                ),
+                              ],
+                            ),
+                            trailing: Icon(Icons.bookmark_border, color: Colors.white),
                           ),
-                          title: Text('Title', style: TextStyle(color: Colors.white)),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('lorem one two three', style: TextStyle(color: Colors.grey)),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text('10 Jan, 2023 10:15 pm',
-                                    style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                              ),
-                            ],
-                          ),
-                          trailing: Icon(Icons.bookmark_border, color: Colors.white),
                         ),
                       ),
                     ],

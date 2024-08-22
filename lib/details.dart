@@ -7,7 +7,9 @@ class Details extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xffF6ECC9),
-        leading: IconButton(onPressed: (){},
+        leading: IconButton(onPressed: (){
+          Navigator.pop(context);
+        },
             icon: Icon(Icons.arrow_back_ios)),
         actions: [
           IconButton(onPressed: (){},

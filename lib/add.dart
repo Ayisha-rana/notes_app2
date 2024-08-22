@@ -69,19 +69,24 @@ class AddPage extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomCenter, // Align the Save button to the bottom center
-            child: Container(
-              margin: EdgeInsets.all(20), // Margin around the container
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24), // Padding inside the container
-              decoration: BoxDecoration(
-                color: Color(0xFFB6A7A3), // Background color of the container
-                borderRadius: BorderRadius.circular(8), // Rounded corners
-              ),
-              child: Text(
-                'Save',
-                style: TextStyle(
-                  color: Colors.white, // Text color
-                  fontSize: 16, // Text size
-                  fontWeight: FontWeight.bold, // Text weight
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.all(20), // Margin around the container
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24), // Padding inside the container
+                decoration: BoxDecoration(
+                  color: Color(0xFFB6A7A3), // Background color of the container
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                ),
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                    color: Colors.white, // Text color
+                    fontSize: 16, // Text size
+                    fontWeight: FontWeight.bold, // Text weight
+                  ),
                 ),
               ),
             ),
