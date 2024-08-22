@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app2/add.dart';
 
 class Homepage extends StatelessWidget {
   @override
@@ -72,7 +73,9 @@ class Homepage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.grey[700],
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder:(context)=>AddPage()));
+          },
           child: Icon(Icons.add),
         ),
       ),
