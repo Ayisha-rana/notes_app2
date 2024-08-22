@@ -1,4 +1,9 @@
+import 'package:notes_app2/dbservice/dbservice.dart';
+
 class Controller {
+
+  Dbservice db =Dbservice();
+
   static List<Map<String, dynamic>> items = [];
 
   void addItems(
@@ -10,7 +15,18 @@ class Controller {
       'description': description,
       'imagePath': imagePath
     };
-    items.add(noteDetails);
-    print(items);
+
+    try{
+
+      db.insertToNote(note: noteDetails);
+
+
+
+
+    }
+    catch(e){
+
+    }
+
   }
 }
