@@ -1,7 +1,26 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class AddPage extends StatelessWidget {
+class AddPage extends StatefulWidget {
   const AddPage({super.key});
+
+  @override
+  _AddPageState createState() => _AddPageState();
+}
+
+class _AddPageState extends State<AddPage> {
+  File? _image;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +29,7 @@ class AddPage extends StatelessWidget {
       body: Stack(
         children: [
           Align(
-            alignment: Alignment.topCenter, // Align the Column to the top center
+            alignment: Alignment.center, // Center the Column
             child: Column(
               mainAxisSize: MainAxisSize.min, // Ensure the Column takes only the space it needs
               children: [
@@ -19,25 +38,31 @@ class AddPage extends StatelessWidget {
                     CircleAvatar(
                       radius: 60,
                       backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.photo_rounded, // Main icon
-                        size: 40, // Adjust size as needed
-                        color: Color(0xFFB6A7A3), // Icon color
-                      ),
+                      backgroundImage: _image != null ? FileImage(_image!) : null, // Display the picked image
+                      child: _image == null
+                          ? Icon(
+                              Icons.photo_rounded, // Main icon
+                              size: 40, // Adjust size as needed
+                              color: Color(0xFFB6A7A3), // Icon color
+                            )
+                          : null,
                     ),
                     Positioned(
                       bottom: 0,
                       right: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(4), // Padding around the add icon
-                        decoration: BoxDecoration(
-                          color: Color(0xFFB6A7A3), // Background color for the add icon
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.add, // Add icon
-                          size: 20, // Adjust size as needed
-                          color: Colors.white, // Add icon color
+                      child: GestureDetector(
+                        onTap: _pickImage, // Trigger image picker on tap
+                        child: Container(
+                          padding: EdgeInsets.all(4), // Padding around the add icon
+                          decoration: BoxDecoration(
+                            color: Color(0xFFB6A7A3), // Background color for the add icon
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.add, // Add icon
+                            size: 20, // Adjust size as needed
+                            color: Colors.white, // Add icon color
+                          ),
                         ),
                       ),
                     ),
