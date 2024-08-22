@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:notes_app2/controller/controller.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -22,6 +23,19 @@ class _AddPageState extends State<AddPage> {
     }
   }
 
+
+
+TextEditingController titlecontroller =  TextEditingController();
+TextEditingController descriptioncontroller =  TextEditingController();
+
+
+
+
+void savehandler(){
+Controller().addItems(title: titlecontroller.text, description: descriptioncontroller.text, imagePath: _image!.path);
+ Navigator.pop(context);
+
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,6 +88,7 @@ class _AddPageState extends State<AddPage> {
                   child: Column(
                     children: [
                       TextField(
+                        controller: titlecontroller,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'TITLE',
@@ -81,6 +96,7 @@ class _AddPageState extends State<AddPage> {
                       ),
                       SizedBox(height: 10), // Space between TextFields
                       TextFormField(
+                        controller: descriptioncontroller,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'DESCRIPTION',
@@ -96,7 +112,7 @@ class _AddPageState extends State<AddPage> {
             alignment: Alignment.bottomCenter, // Align the Save button to the bottom center
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                savehandler();
               },
               child: Container(
                 margin: EdgeInsets.all(20), // Margin around the container
