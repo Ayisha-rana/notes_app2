@@ -15,6 +15,7 @@ class MainApp extends StatelessWidget {
 
       
       home: Scaffold(
+        backgroundColor: Colors.red,
 
 
 
