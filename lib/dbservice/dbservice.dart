@@ -16,6 +16,7 @@ class Dbservice {
 
   Future<void> insertToNote({required Map<String, dynamic> note}) async {
     try {
+<<<<<<< HEAD
       //
       final a = await database!.insert(
         'note',
@@ -27,4 +28,25 @@ class Dbservice {
       rethrow;
     }
   }
+=======
+      await database!.insert('note', note,conflictAlgorithm: ConflictAlgorithm.replace);
+      print('ghjkjh000000000000000000000000');
+    } catch (e) {
+
+    }
+
+    print('dfghjk===========================================================l');
+  }
+
+  Future<List<Map<String, dynamic>>> getData() async {
+    try {
+      final data = await database!.query('note');
+      print('Data fetched: $data');
+      return data;
+    } catch (e) {
+      print('Error in getData: $e');
+      return [];
+    }
+  }
+>>>>>>> 50ecf98ebd8e4214c2550c391da6852d0236b9d0
 }
