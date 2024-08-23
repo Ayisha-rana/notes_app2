@@ -9,7 +9,7 @@ class Controller {
   void addItems(
       {required String title,
       required String description,
-      required String imagePath}) {
+      required String imagePath}) async{
     Map<String, dynamic> noteDetails = {
       'title': title,
       'description': description,
@@ -18,13 +18,14 @@ class Controller {
 
     try{
 
-      db.insertToNote(note: noteDetails);
+    await   db.insertToNote(note: noteDetails);
 
 
 
 
     }
     catch(e){
+      
 
     }
 
