@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:notes_app2/controller/controller.dart';
@@ -12,7 +13,9 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   File? _image;
+  Uint8List? _imageBytes; // Byte data of the image
 
+  // Image picker function to pick the image from the gallery
   Future<void> _pickImage() async {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
@@ -20,22 +23,32 @@ class _AddPageState extends State<AddPage> {
       setState(() {
         _image = File(pickedFile.path);
       });
+      // Convert image to bytes
+      _imageBytes = await _image!.readAsBytes();
     }
   }
 
+  // Text controllers for title and description
+  TextEditingController titlecontroller = TextEditingController();
+  TextEditingController descriptioncontroller = TextEditingController();
 
+  // Save handler function
+  void saveHandler() {
+    if (_imageBytes != null) {
+      Controller().addItems(
+        title: titlecontroller.text,
+        description: descriptioncontroller.text,
+        imagePath: _imageBytes!, // Send image as bytes (blob)
+      );
+      Navigator.pop(context); // Close the page after saving
+    } else {
+      // Handle the case when no image is selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select an image!')),
+      );
+    }
+  }
 
-TextEditingController titlecontroller =  TextEditingController();
-TextEditingController descriptioncontroller =  TextEditingController();
-
-
-
-
-void savehandler(){
-Controller().addItems(title: titlecontroller.text, description: descriptioncontroller.text, imagePath: _image!.path);
- Navigator.pop(context);
-
-}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,46 +56,46 @@ Controller().addItems(title: titlecontroller.text, description: descriptioncontr
       body: Stack(
         children: [
           Align(
-            alignment: Alignment.center, // Center the Column
+            alignment: Alignment.center,
             child: Column(
-              mainAxisSize: MainAxisSize.min, // Ensure the Column takes only the space it needs
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Stack(
                   children: [
                     CircleAvatar(
                       radius: 60,
                       backgroundColor: Colors.white,
-                      backgroundImage: _image != null ? FileImage(_image!) : null, // Display the picked image
+                      backgroundImage: _image != null ? FileImage(_image!) : null,
                       child: _image == null
                           ? Icon(
-                              Icons.photo_rounded, // Main icon
-                              size: 40, // Adjust size as needed
-                              color: Color(0xFFB6A7A3), // Icon color
-                            )
+                        Icons.photo_rounded,
+                        size: 40,
+                        color: Color(0xFFB6A7A3),
+                      )
                           : null,
                     ),
                     Positioned(
                       bottom: 0,
                       right: 0,
                       child: GestureDetector(
-                        onTap: _pickImage, // Trigger image picker on tap
+                        onTap: _pickImage,
                         child: Container(
-                          padding: EdgeInsets.all(4), // Padding around the add icon
+                          padding: EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            color: Color(0xFFB6A7A3), // Background color for the add icon
+                            color: Color(0xFFB6A7A3),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
-                            Icons.add, // Add icon
-                            size: 20, // Adjust size as needed
-                            color: Colors.white, // Add icon color
+                            Icons.add,
+                            size: 20,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 20), // Space between CircleAvatar and TextFields
+                SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -94,7 +107,7 @@ Controller().addItems(title: titlecontroller.text, description: descriptioncontr
                           labelText: 'TITLE',
                         ),
                       ),
-                      SizedBox(height: 10), // Space between TextFields
+                      SizedBox(height: 10),
                       TextFormField(
                         controller: descriptioncontroller,
                         decoration: InputDecoration(
@@ -109,24 +122,22 @@ Controller().addItems(title: titlecontroller.text, description: descriptioncontr
             ),
           ),
           Align(
-            alignment: Alignment.bottomCenter, // Align the Save button to the bottom center
+            alignment: Alignment.bottomCenter,
             child: GestureDetector(
-              onTap: () {
-                savehandler();
-              },
+              onTap: saveHandler, // Trigger the save handler function
               child: Container(
-                margin: EdgeInsets.all(20), // Margin around the container
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24), // Padding inside the container
+                margin: EdgeInsets.all(20),
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: BoxDecoration(
-                  color: Color(0xFFB6A7A3), // Background color of the container
-                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                  color: Color(0xFFB6A7A3),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
                   'Save',
                   style: TextStyle(
-                    color: Colors.white, // Text color
-                    fontSize: 16, // Text size
-                    fontWeight: FontWeight.bold, // Text weight
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

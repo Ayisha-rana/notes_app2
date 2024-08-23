@@ -6,11 +6,20 @@ import 'package:notes_app2/controller/controller.dart';
 import 'package:notes_app2/details.dart';
 
 class Homepage extends StatefulWidget {
+
+
+
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -98,9 +107,7 @@ class _HomepageState extends State<Homepage> {
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => AddPage())).then((value) {
-                  setState(() {
-                    
-                  });
+
                 },);
           },
           child: Icon(Icons.add),
