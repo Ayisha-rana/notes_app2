@@ -9,20 +9,18 @@ class Dbservice {
     String path = join(databasesPath, 'demo.db');
     database = await openDatabase(path, onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE note(title TEXT,description TEXT,image BLOB )');
+          'CREATE TABLE note(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, image BLOB)');
     }, version: 1);
-    print('ghjkvhkl');
+    print('Database initialized');
   }
 
   Future<void> insertToNote({required Map<String, dynamic> note}) async {
     try {
-      await database!.insert('note', note,conflictAlgorithm: ConflictAlgorithm.replace);
-      print('ghjkjh000000000000000000000000');
+      await database!.insert('note', note, conflictAlgorithm: ConflictAlgorithm.replace);
+      print('Note inserted');
     } catch (e) {
-
+      print('Error in insertToNote: $e');
     }
-
-    print('dfghjk===========================================================l');
   }
 
   Future<List<Map<String, dynamic>>> getData() async {
@@ -36,6 +34,17 @@ class Dbservice {
     }
   }
 
-
-
+  // Delete item based on id
+  Future<void> deleteItem(int id) async {
+    try {
+      await database!.delete(
+        'note',
+        where: 'id = ?',  // Condition to match the record to be deleted
+        whereArgs: [id],  // Arguments for the condition
+      );
+      print('Item deleted with id: $id');
+    } catch (e) {
+      print('Error in deleteItem: $e');
+    }
+  }
 }

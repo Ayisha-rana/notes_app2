@@ -1,17 +1,24 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:notes_app2/dbservice/dbservice.dart';
 
 class Details extends StatelessWidget {
-  const Details({
+  final String title;
+  final int id;
+  final String description;
+  final Uint8List? image;  // Nullable image
+  final VoidCallback onDelete;  // Callback function for delete operation
+
+  Details({
     super.key,
     required this.title,
     required this.description,
-    this.image,  // Make image nullable
+    required this.id,
+    this.image,
+    required this.onDelete,  // Initialize the callback
   });
 
-  final String title;
-  final String description;
-  final Uint8List? image;  // Nullable image
+  Dbservice dbservice = Dbservice();
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +35,14 @@ class Details extends StatelessWidget {
           IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
           const SizedBox(width: 7),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await dbservice.deleteItem(id);  // Ensure deletion is complete
+              onDelete();  // Call the delete callback
+              Navigator.pop(context);  // Go back to the previous screen
+            },
             icon: const Icon(Icons.delete),
             color: Colors.redAccent,
-          )
+          ),
         ],
       ),
       backgroundColor: const Color(0xffF6ECC9),

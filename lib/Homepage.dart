@@ -1,21 +1,15 @@
-import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:notes_app2/add.dart';
 import 'package:notes_app2/controller/controller.dart';
 import 'package:notes_app2/details.dart';
 
 class Homepage extends StatefulWidget {
-
-
-
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
-
   List<Map<String, dynamic>> _notes = []; // Store the notes from the database
 
   @override
@@ -32,13 +26,9 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
+    print('homepage');
     return DefaultTabController(
       length: 2, // Number of tabs
       child: Scaffold(
@@ -78,15 +68,32 @@ class _HomepageState extends State<Homepage> {
                       final image = note['image'] as Uint8List?;
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Details(title: note['title'],description: note['description'],image: image,)));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Details(
+                                title: note['title'],
+                                description: note['description'],
+                                image: note['image'],
+                                id: note['id'],
+                                onDelete: () async {
+                                  // Perform deletion and update the list
+                                  await Controller().deleteItem(note['id']);
+                                  await _fetchNotes(); // Reload notes
+                                },
+                              ),
+                            ),
+                          ).then((_) {
+                            // Refresh the list after returning from Details
+                            _fetchNotes();
+                          });
                         },
                         child: Card(
                           color: Colors.grey[900],
                           margin: EdgeInsets.all(8.0),
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundImage: image != null ? MemoryImage(image as Uint8List) : null,
+                              backgroundImage: image != null ? MemoryImage(image) : null,
                               backgroundColor: Colors.grey[700],
                               child: image == null ? Icon(Icons.photo_rounded, color: Colors.white) : null,
                             ),
@@ -108,8 +115,7 @@ class _HomepageState extends State<Homepage> {
                     },
                   ),
                   Container(
-                    color: Colors
-                        .black, // Optional: Match the background color of the app
+                    color: Colors.black, // Optional: Match the background color of the app
                     child: Center(
                       child: Text(''), // Empty text
                     ),
@@ -123,10 +129,12 @@ class _HomepageState extends State<Homepage> {
           backgroundColor: Colors.grey[700],
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AddPage())).then((value) {
+              context,
+              MaterialPageRoute(builder: (context) => AddPage()),
+            ).then((_) {
+              // Refresh the list after returning from AddPage
               _fetchNotes();
-
-                },);
+            });
           },
           child: Icon(Icons.add),
         ),

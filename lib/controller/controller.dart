@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:notes_app2/dbservice/dbservice.dart';
 
 class Controller {
@@ -13,12 +12,12 @@ class Controller {
     return await imageFile.readAsBytes();
   }
 
-  Future<void> addItems(
-      {required String title,
-        required String description,
-        required Uint8List imagePath}) async {
+  Future<void> addItems({
+    required String title,
+    required String description,
+    required Uint8List imagePath,
+  }) async {
     try {
-
       Map<String, dynamic> noteDetails = {
         'title': title,
         'description': description,
@@ -35,6 +34,7 @@ class Controller {
       print('Error: $e');
     }
   }
+
   Future<List<Map<String, dynamic>>> getItems() async {
     try {
       items = await db.getData();
@@ -43,6 +43,18 @@ class Controller {
     } catch (e) {
       print('Error in getItems: $e');
       return [];
+    }
+  }
+
+  Future<void> deleteItem(int id) async {
+    try {
+      await db.deleteItem(id);  // Call the delete function from Dbservice
+      print('Item deleted: $id');
+      
+      // Refresh the items list
+      items = await db.getData();
+    } catch (e) {
+      print('Error in deleteItem: $e');
     }
   }
 }
