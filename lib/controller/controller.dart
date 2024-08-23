@@ -15,23 +15,9 @@ class Controller {
 
   Future<void> addItems(
       {required String title,
-<<<<<<< HEAD
-      required String description,
-      required String imagePath}) async{
-    Map<String, dynamic> noteDetails = {
-      'title': title,
-      'description': description,
-      'imagePath': imagePath
-    };
-
-    try{
-
-    await   db.insertToNote(note: noteDetails);
-=======
         required String description,
         required Uint8List imagePath}) async {
     try {
->>>>>>> 50ecf98ebd8e4214c2550c391da6852d0236b9d0
 
       Map<String, dynamic> noteDetails = {
         'title': title,
@@ -48,11 +34,6 @@ class Controller {
     } catch (e) {
       print('Error: $e');
     }
-<<<<<<< HEAD
-    catch(e){
-      
-
-=======
   }
   Future<List<Map<String, dynamic>>> getItems() async {
     try {
@@ -62,7 +43,6 @@ class Controller {
     } catch (e) {
       print('Error in getItems: $e');
       return [];
->>>>>>> 50ecf98ebd8e4214c2550c391da6852d0236b9d0
     }
   }
 }

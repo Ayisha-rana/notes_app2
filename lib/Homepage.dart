@@ -79,7 +79,7 @@ class _HomepageState extends State<Homepage> {
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Details()));
+                              MaterialPageRoute(builder: (context) => Details(title: note['title'],description: note['description'],image: image,)));
                         },
                         child: Card(
                           color: Colors.grey[900],

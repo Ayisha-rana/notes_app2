@@ -16,19 +16,6 @@ class Dbservice {
 
   Future<void> insertToNote({required Map<String, dynamic> note}) async {
     try {
-<<<<<<< HEAD
-      //
-      final a = await database!.insert(
-        'note',
-        note,
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      print(a);
-    } catch (e) {print(e);
-      rethrow;
-    }
-  }
-=======
       await database!.insert('note', note,conflictAlgorithm: ConflictAlgorithm.replace);
       print('ghjkjh000000000000000000000000');
     } catch (e) {
@@ -48,5 +35,7 @@ class Dbservice {
       return [];
     }
   }
->>>>>>> 50ecf98ebd8e4214c2550c391da6852d0236b9d0
+
+
+
 }
