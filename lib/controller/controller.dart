@@ -28,12 +28,21 @@ class Controller {
       print('1');
 
       await db.insertToNote(note: noteDetails);
+
+      items = await db.getData();
       print('2');
     } catch (e) {
       print('Error: $e');
     }
   }
   Future<List<Map<String, dynamic>>> getItems() async {
-    return await db.getData();
+    try {
+      items = await db.getData();
+      print('Fetched items: $items');
+      return items;
+    } catch (e) {
+      print('Error in getItems: $e');
+      return [];
+    }
   }
 }

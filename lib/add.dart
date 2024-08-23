@@ -33,18 +33,18 @@ class _AddPageState extends State<AddPage> {
   TextEditingController descriptioncontroller = TextEditingController();
 
   // Save handler function
-  void saveHandler() {
-    if (_imageBytes != null) {
-      Controller().addItems(
+  Future<void> saveHandler() async {
+    if (_imageBytes != null && titlecontroller.text.isNotEmpty && descriptioncontroller.text.isNotEmpty) {
+      await Controller().addItems(
         title: titlecontroller.text,
         description: descriptioncontroller.text,
         imagePath: _imageBytes!, // Send image as bytes (blob)
       );
-      Navigator.pop(context); // Close the page after saving
+      Navigator.pop(context, true); // Close the page and indicate success
     } else {
-      // Handle the case when no image is selected
+      // Handle the case when no image is selected or fields are empty
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select an image!')),
+        SnackBar(content: Text('Please fill in all fields and select an image!')),
       );
     }
   }

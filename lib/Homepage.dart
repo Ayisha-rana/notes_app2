@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:notes_app2/add.dart';
@@ -14,6 +15,22 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+
+  List<Map<String, dynamic>> _notes = []; // Store the notes from the database
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNotes(); // Fetch the notes when the page loads
+  }
+
+  // Fetch the data from the database
+  Future<void> _fetchNotes() async {
+    List<Map<String, dynamic>> data = await Controller().getItems();
+    setState(() {
+      _notes = data;
+    });
+  }
 
 
 
@@ -55,40 +72,40 @@ class _HomepageState extends State<Homepage> {
               child: TabBarView(
                 children: [
                   ListView.builder(
-                    itemCount: Controller.items.length,
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Details()));
-                      },
-                      child: Card(
-                        color: Colors.grey[900],
-                        margin: EdgeInsets.all(8.0),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: FileImage(File(Controller.items[index]['imagePath'])),
-                            backgroundColor: Colors.grey[700],
+                    itemCount: _notes.length,
+                    itemBuilder: (context, index) {
+                      final note = _notes[index];
+                      final image = note['image'] as Uint8List?;
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Details()));
+                        },
+                        child: Card(
+                          color: Colors.grey[900],
+                          margin: EdgeInsets.all(8.0),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: image != null ? MemoryImage(image as Uint8List) : null,
+                              backgroundColor: Colors.grey[700],
+                              child: image == null ? Icon(Icons.photo_rounded, color: Colors.white) : null,
+                            ),
+                            title: Text(note['title'] ?? 'No Title', style: TextStyle(color: Colors.white)),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(note['description'] ?? 'No Description', style: TextStyle(color: Colors.grey)),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text('10 Jan, 2023 10:15 pm', style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+                                ),
+                              ],
+                            ),
+                            trailing: Icon(Icons.bookmark_border, color: Colors.white),
                           ),
-                          title: Text(Controller.items[index]['title'],
-                              style: TextStyle(color: Colors.white)),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(Controller.items[index]['description'],
-                                  style: TextStyle(color: Colors.grey)),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text('10 Jan, 2023 10:15 pm',
-                                    style: TextStyle(
-                                        color: Colors.grey[600], fontSize: 12)),
-                              ),
-                            ],
-                          ),
-                          trailing:
-                              Icon(Icons.bookmark_border, color: Colors.white),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                   Container(
                     color: Colors
@@ -107,6 +124,7 @@ class _HomepageState extends State<Homepage> {
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => AddPage())).then((value) {
+              _fetchNotes();
 
                 },);
           },
