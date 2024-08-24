@@ -1,24 +1,52 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:notes_app2/controller/addedit.dart';
 import 'package:notes_app2/dbservice/dbservice.dart';
 
-class Details extends StatelessWidget {
+class Details extends StatefulWidget {
   final String title;
   final int id;
   final String description;
   final Uint8List? image;  // Nullable image
-  final VoidCallback onDelete;  // Callback function for delete operation
 
   Details({
     super.key,
     required this.title,
     required this.description,
     required this.id,
-    this.image,
-    required this.onDelete,  // Initialize the callback
+    this.image, required Future<Null> Function() onDelete,
   });
 
-  Dbservice dbservice = Dbservice();
+  @override
+  _DetailsState createState() => _DetailsState();
+}
+
+class _DetailsState extends State<Details> {
+  late Dbservice dbservice;
+  late String title;
+  late String description;
+  late Uint8List? image;
+
+  @override
+  void initState() {
+    super.initState();
+    dbservice = Dbservice();
+    title = widget.title;
+    description = widget.description;
+    image = widget.image;
+  }
+
+  void _updateDetails() async {
+    // Fetch updated data from the database
+    final data = await dbservice.getData();
+    final updatedNote = data.firstWhere((note) => note['id'] == widget.id, orElse: () => {});
+    
+    setState(() {
+      title = updatedNote['title'] ?? widget.title;
+      description = updatedNote['description'] ?? widget.description;
+      image = updatedNote['image'];  // Update image if necessary
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +60,30 @@ class Details extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddEditPage(
+                    id: widget.id,
+                    title: title,
+                    description: description,
+                    image: image,
+                    onSave: _updateDetails,  // Pass the callback
+                  ),
+                ),
+              ).then((_) {
+                // Refresh the data when returning from AddEditPage
+                _updateDetails();
+              });
+            },
+            icon: const Icon(Icons.edit),
+          ),
           const SizedBox(width: 7),
           IconButton(
             onPressed: () async {
-              await dbservice.deleteItem(id);  // Ensure deletion is complete
-              onDelete();  // Call the delete callback
+              await dbservice.deleteItem(widget.id);
               Navigator.pop(context);  // Go back to the previous screen
             },
             icon: const Icon(Icons.delete),
@@ -61,13 +107,13 @@ class Details extends StatelessWidget {
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(15),
                       child: Image(
-                        image: MemoryImage(image!),  // Use MemoryImage if image is not null
+                        image: MemoryImage(image!),
                         fit: BoxFit.cover,
                       ),
                     )
                   : const Center(
                       child: Text('No Image Available'),
-                    ),  // Display a placeholder if the image is null
+                    ),
             ),
             const SizedBox(height: 45),
             Align(

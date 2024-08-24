@@ -57,4 +57,36 @@ class Controller {
       print('Error in deleteItem: $e');
     }
   }
+  Future<void> updateItem({
+    required int id,
+    required String title,
+    required String description,
+    Uint8List? imagePath, // Optional parameter
+  }) async {
+    try {
+      Map<String, dynamic> updatedNote = {
+        'title': title,
+        'description': description,
+      };
+
+      // Include the image only if it's not null
+      if (imagePath != null) {
+        updatedNote['image'] = imagePath;
+      }
+
+      await Dbservice.database!.update(
+        'note',
+        updatedNote,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+
+      print('Item updated with id: $id');
+
+      // Refresh the items list after updating
+      items = await db.getData();
+    } catch (e) {
+      print('Error in updateItem: $e');
+    }
+  }
 }
