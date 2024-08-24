@@ -17,7 +17,8 @@ class _AddPageState extends State<AddPage> {
 
   // Image picker function to pick the image from the gallery
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
@@ -34,7 +35,9 @@ class _AddPageState extends State<AddPage> {
 
   // Save handler function
   Future<void> saveHandler() async {
-    if (_imageBytes != null && titlecontroller.text.isNotEmpty && descriptioncontroller.text.isNotEmpty) {
+    if (_imageBytes != null &&
+        titlecontroller.text.isNotEmpty &&
+        descriptioncontroller.text.isNotEmpty) {
       await Controller().addItems(
         title: titlecontroller.text,
         description: descriptioncontroller.text,
@@ -44,7 +47,8 @@ class _AddPageState extends State<AddPage> {
     } else {
       // Handle the case when no image is selected or fields are empty
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all fields and select an image!')),
+        SnackBar(
+            content: Text('Please fill in all fields and select an image!')),
       );
     }
   }
@@ -65,13 +69,14 @@ class _AddPageState extends State<AddPage> {
                     CircleAvatar(
                       radius: 60,
                       backgroundColor: Colors.white,
-                      backgroundImage: _image != null ? FileImage(_image!) : null,
+                      backgroundImage:
+                          _image != null ? FileImage(_image!) : null,
                       child: _image == null
                           ? Icon(
-                        Icons.photo_rounded,
-                        size: 40,
-                        color: Color(0xFFB6A7A3),
-                      )
+                              Icons.photo_rounded,
+                              size: 40,
+                              color: Color(0xFFB6A7A3),
+                            )
                           : null,
                     ),
                     Positioned(

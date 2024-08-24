@@ -18,6 +18,17 @@ class Controller {
     required Uint8List imagePath,
   }) async {
     try {
+      List<Map<String, dynamic>> existingItems =
+          await Dbservice.database!.query(
+        'note',
+        where: 'title = ?AND description=?',
+        whereArgs: [title, description],
+      );
+
+      if (existingItems.isNotEmpty) {
+        print('Item with the same title already exists');
+        return;
+      }
       Map<String, dynamic> noteDetails = {
         'title': title,
         'description': description,
@@ -48,15 +59,16 @@ class Controller {
 
   Future<void> deleteItem(int id) async {
     try {
-      await db.deleteItem(id);  // Call the delete function from Dbservice
+      await db.deleteItem(id); // Call the delete function from Dbservice
       print('Item deleted: $id');
-      
+
       // Refresh the items list
       items = await db.getData();
     } catch (e) {
       print('Error in deleteItem: $e');
     }
   }
+
   Future<void> updateItem({
     required int id,
     required String title,
